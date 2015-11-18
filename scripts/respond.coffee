@@ -6,9 +6,9 @@ getTimeDiffAsMinutes = (old_msec) ->
   return diff_minutes
  
 module.exports = (robot) ->
-  robot.hear /\[(rp\said=1253331\sto=[0-9]+\-[0-9]+|To:1253331)\]\s(.+)/, (msg) ->
+  robot.hear /\[(rp\said=1253331\sto=[0-9]+\-[0-9]+|To:1253331)\]\s(.+)\n(.+)/, (msg) ->
     DOCOMO_API_KEY = "42725454637272782e736e616c374969565a736b7a3650703634514455462f7862335766534a6844352e32"
-    message = msg.match[1]
+    message = msg.match[3]
     return unless DOCOMO_API_KEY && message
  
     ## ContextIDを読み込む
@@ -35,6 +35,7 @@ module.exports = (robot) ->
         utt: message
         nickname: user_name if user_name
         context: context if context
+        t: 20
       , (err, response, body) ->
         ## ContextIDの保存
         robot.brain.set KEY_DOCOMO_CONTEXT, body.context
